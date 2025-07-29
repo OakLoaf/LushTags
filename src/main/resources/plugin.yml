@@ -1,0 +1,6 @@
+name: LushTags
+version: ${project.version}
+main: org.lushplugins.lushtags.LushTags
+api-version: '1.17'
+softdepend:
+  - PlaceholderAPI

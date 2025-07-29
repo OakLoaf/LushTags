@@ -1,0 +1,37 @@
+# This will likely be replaced/refactored in the future
+tags-gui:
+  title: "%tag_category%"
+  format:
+    - "#########"
+    - "#ttttttt#"
+    - "#ttttttt#"
+    - "#ttttttt#"
+    - "#ttttttt#"
+    - "###<r>###"
+  slots:
+    '#':
+      icon:
+        material: lime_stained_glass_pane
+        display-name: "&r"
+    't':
+      icon:
+        material: name_tag
+        display-name: "%tag_name%"
+    'r':
+      icon:
+        material: red_dye
+        display-name: "&rRemove Tag"
+    '<':
+      icon:
+        material: arrow
+        display-name: "&rPrevious Page"
+    '>':
+      icon:
+        material: arrow
+        display-name: "&rNext Page"
+
+messages:
+  set-tag: "&#b7faa2Your %tag_type% has been set to %tag_tag%"
+  remove-tag: "&#b7faa2Your %tag_type% has been removed"
+  no-permission: "&#ff6969You don't have the required permission for this"
+  reload: "&#b7faa2Successfully reloaded LushTags"

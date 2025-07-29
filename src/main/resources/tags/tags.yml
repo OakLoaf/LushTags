@@ -1,0 +1,8 @@
+# Changing commands requires a restart
+commands:
+  - "pronouns"
+
+tags:
+  they/them:
+    name: "they/them"
+    tag: "they/them"

@@ -1,0 +1,9 @@
+# Where user data will be stored (Options: json, sqlite, mysql, postgres)
+type: sqlite
+
+host: localhost
+# MySQL default port: 3306
+port: 3306
+database: dbName
+username: user
+password: pass

@@ -1,0 +1,5 @@
+tags:
+  example_1:
+    name: "Example 1"
+    tag: "Example 1"
+    permission: "example.tag.permission"
