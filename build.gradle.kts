@@ -19,7 +19,7 @@ repositories {
 dependencies {
     // Dependencies
     compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
-    compileOnly("com.mysql:mysql-connector-j:8.3.0")
+    compileOnly("com.mysql:mysql-connector-j:9.3.0")
     compileOnly("org.xerial:sqlite-jdbc:3.46.0.0")
 
     // Soft Dependencies
