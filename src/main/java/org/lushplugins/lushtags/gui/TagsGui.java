@@ -1,6 +1,5 @@
 package org.lushplugins.lushtags.gui;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import org.lushplugins.lushtags.LushTags;
@@ -39,6 +38,8 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
             return;
         }
 
+        DisplayItemStack tagIcon = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon();
+
         ArrayDeque<Tag> tags = this.getPageContent(actor, gui.page(), slots.size());
         for (Slot slot : slots) {
             if (tags.isEmpty()) {
@@ -47,9 +48,11 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
             }
 
             Tag tag = tags.pop();
-            DisplayItemStack icon = DisplayItemStack.builder()
-                .setType(Material.NAME_TAG)
-                .setDisplayName(tag.name())
+
+            DisplayItemStack icon = DisplayItemStack.builder(tagIcon)
+                .replace(str -> str
+                    .replace("%tag%", tag.tag())
+                    .replace("%tag_name%", tag.name()))
                 .build();
 
             slot.icon(icon.asItemStack(actor.player()));

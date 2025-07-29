@@ -153,7 +153,7 @@ public class TagManager {
                     .locked(true)
                     .applyLayer(guiLayer);
 
-                categories.add(new TagCategory(categoryId, tagTypeId, tagsConfig.commands(), gui));
+                categories.add(new TagCategory(categoryId, tagTypeId, tagsConfig.commands(), gui, tagsConfig.getTagIcon()));
             }
         } catch (IOException e) {
             LushTags.getInstance().getLogger().log(Level.WARNING, "Caught error whilst loading tags: ", e);
