@@ -6,3 +6,5 @@ updates:
       interval: daily
     ignore:
       - dependency-name: "io.papermc.paper:paper-api"
+      - dependency-name: "com.mysql:mysql-connector-j"
+      - dependency-name: "org.xerial:sqlite-jdbc"
