@@ -20,7 +20,7 @@ dependencies {
     // Dependencies
     compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
     compileOnly("com.mysql:mysql-connector-j:9.3.0")
-    compileOnly("org.xerial:sqlite-jdbc:3.46.0.0")
+    compileOnly("org.xerial:sqlite-jdbc:3.50.3.0")
 
     // Soft Dependencies
     compileOnly("me.clip:placeholderapi:2.11.6")
