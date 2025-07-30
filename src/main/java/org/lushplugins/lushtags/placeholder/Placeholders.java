@@ -6,7 +6,7 @@ import org.lushplugins.placeholderhandler.annotation.Placeholder;
 import org.lushplugins.placeholderhandler.annotation.SubPlaceholder;
 import org.lushplugins.lushtags.tag.Tag;
 
-// TODO: Migrate placeholders here, needs parameter support for '<tagType>'
+@SuppressWarnings("unused")
 @Placeholder("lushtags")
 public class Placeholders {
 

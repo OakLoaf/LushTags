@@ -2,9 +2,11 @@ package org.lushplugins.lushtags;
 
 import org.lushplugins.guihandler.slot.SlotProvider;
 import org.lushplugins.lushtags.command.TagCategoryCommand;
+import org.lushplugins.lushtags.placeholder.Placeholders;
 import org.lushplugins.lushtags.storage.StorageManager;
 import org.lushplugins.lushtags.tag.TagCategory;
 import org.lushplugins.lushtags.tag.TagType;
+import org.lushplugins.lushtags.user.TagsUser;
 import org.lushplugins.lushtags.user.UserCache;
 import org.lushplugins.guihandler.GuiHandler;
 import org.lushplugins.lushlib.libraries.jackson.databind.ObjectMapper;
@@ -12,12 +14,12 @@ import org.lushplugins.lushlib.libraries.jackson.databind.PropertyNamingStrategi
 import org.lushplugins.lushlib.libraries.jackson.dataformat.yaml.YAMLFactory;
 import org.lushplugins.lushlib.plugin.SpigotPlugin;
 import org.lushplugins.lushlib.serializer.JacksonHelper;
+import org.lushplugins.placeholderhandler.PlaceholderHandler;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 import org.lushplugins.lushtags.command.TagsCommand;
 import org.lushplugins.lushtags.config.ConfigManager;
-import org.lushplugins.lushtags.hook.PlaceholderAPIHook;
 import org.lushplugins.lushtags.tag.TagManager;
 import org.lushplugins.lushtags.util.lamp.annotation.TagTypeId;
 import org.lushplugins.lushtags.util.lamp.response.StringMessageResponseHandler;
@@ -74,7 +76,13 @@ public final class LushTags extends SpigotPlugin {
             }
         }
 
-        ifPluginEnabled("PlaceholderAPI", PlaceholderAPIHook::register);
+        PlaceholderHandler.builder(this)
+            .registerParameterProvider(TagsUser.class, (type, parameter, context) -> {
+                return LushTags.getInstance().getUserCache().getCachedUser(context.player().getUniqueId());
+            })
+            .registerParameterProvider(String.class, (type, parameter, context) -> parameter) // TODO: Migrate to PlaceholderHandler
+            .build()
+            .register(new Placeholders());
     }
 
     @Override
