@@ -1,0 +1,78 @@
+name: Create Release on Version Update
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+
+    env:
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+
+      - name: Extract version from build.gradle.kts
+        id: get_version
+        run: |
+          FULL_VERSION=$(grep -oP 'version = "\K[0-9]+\.[0-9]+\.[0-9]+(?:-\w*)?' build.gradle.kts)
+          echo "FULL_VERSION=$FULL_VERSION" >> $GITHUB_ENV
+          
+          VERSION=$(grep -oP 'version = "\K[0-9]+\.[0-9]+\.[0-9]+' build.gradle.kts)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Check if version is release ready
+        uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ env.FULL_VERSION }}
+          regex: '[a-zA-Z]'
+          flags: gm
+
+      - name: Set project release type
+        if: ${{ steps.regex-match.outputs.match == '' }}
+        run: |
+          if git show-ref --tags --verify --quiet "refs/tags/v${{ env.VERSION }}"; then
+            echo "RELEASE_TYPE=alpha" >> $GITHUB_ENV
+          else
+            echo "RELEASE_TYPE=release" >> $GITHUB_ENV
+          fi
+
+      - name: Set project release type
+        if: ${{ steps.regex-match.outputs.match != '' }}
+        run: |
+          echo "RELEASE_TYPE=alpha" >> $GITHUB_ENV
+
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew shadowJar
+
+      - name: Post GitHub Release
+        uses: svenstaro/upload-release-action@v2
+        if: env.RELEASE_TYPE == 'release'
+        with:
+          repo_token: ${{ secrets.REPO_TOKEN }}
+          file: build/libs/*.jar
+          file_glob: true
+          asset_name: ${{ github.event.repository.name }}-${{ env.VERSION }}
+          tag: v${{ env.VERSION }}
+          overwrite: false
+
+      - name: Post Modrinth Release
+        if: env.MODRINTH_TOKEN != ''
+        run: |
+          chmod +x ./gradlew
+          ./gradlew modrinth
