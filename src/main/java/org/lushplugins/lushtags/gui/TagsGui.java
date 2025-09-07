@@ -40,7 +40,7 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
 
         DisplayItemStack tagIcon = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon();
 
-        ArrayDeque<Tag> tags = this.getPageContent(actor, gui.page(), slots.size());
+        ArrayDeque<Tag> tags = this.getPageContent(gui, gui.page(), slots.size());
         for (Slot slot : slots) {
             if (tags.isEmpty()) {
                 slot.iconProvider(IconProvider.EMPTY);
@@ -87,7 +87,7 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
     @ButtonProvider('>')
     public void nextPageButton(Gui gui, @Slots('t') List<Slot> slots) {
         int pageSize = slots.size();
-        Stream<Tag> content = this.getPageContentStream(gui.actor(), gui.page(), pageSize);
+        Stream<Tag> content = this.getPageContentStream(gui, gui.page(), pageSize);
         if (content.count() == pageSize) {
             gui.nextPage();
         }
@@ -102,7 +102,7 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
     }
 
     @Override
-    public Stream<Tag> getContentStream(GuiActor actor) {
+    public Stream<Tag> getContentStream(Gui gui) {
         TagType tagType = LushTags.getInstance().getTagManager().getTagType(this.tagType);
         if (tagType == null) {
             return Stream.empty();
