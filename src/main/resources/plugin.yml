@@ -4,3 +4,6 @@ main: org.lushplugins.lushtags.LushTags
 api-version: '1.17'
 softdepend:
   - PlaceholderAPI
+
+# PluginUpdater
+modrinth-project-id: "jPX54WG8"
