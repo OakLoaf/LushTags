@@ -27,4 +27,10 @@ public class Placeholders {
         Tag tag = user != null ? user.getTag(tagType) : null;
         return tag != null ? tag.name() : "";
     }
+
+    @SubPlaceholder("<tagType>_active")
+    public String tagActive(@Nullable TagsUser user, String tagType) {
+        Tag tag = user != null ? user.getTag(tagType) : null;
+        return tag != null ? "true" : "false";
+    }
 }
