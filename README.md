@@ -1,3 +1,5 @@
+![This project proudly suppports the LGBTQIA+ community](https://raw.githubusercontent.com/OakLoaf/OakLoaf/refs/heads/main/assets/pride.png)
+
 # LushTags
 LushTags is an expansive tags plugin allowing you to create as many tag types as you want. That means you can use LushTags for badges, chat colours, tags, icons, etc. there is no limit to the number of tag types you can create!
 
