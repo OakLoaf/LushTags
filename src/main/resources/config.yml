@@ -35,5 +35,6 @@ messages:
   set-tag-other: "&#b7faa2%target%'s %tag_type% has been set to %tag_tag%"
   remove-tag: "&#b7faa2Your %tag_type% has been removed"
   invalid-tag: "&#ff6969Could not find the tag %tag%"
+  missing-gui: "&#ff6969No tag type gui has been created for this tag type"
   no-permission: "&#ff6969You don't have the required permission for this"
   reload: "&#b7faa2Successfully reloaded LushTags"

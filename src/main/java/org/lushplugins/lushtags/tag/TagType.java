@@ -66,11 +66,6 @@ public class TagType {
         return categories.get(id);
     }
 
-    public TagCategory getFirstTagCategory() {
-        // TODO: Move to LinkedHashMap?
-        return categories.values().stream().findFirst().get();
-    }
-
     public Collection<TagCategory> getTagCategories() {
         return categories.values();
     }
@@ -85,12 +80,5 @@ public class TagType {
 
     public Gui.Builder getGui() {
         return gui;
-    }
-
-    /**
-     * @return the main gui to represent this tag type
-     */
-    public Gui.Builder getMainGui() {
-        return gui != null ? gui : this.getFirstTagCategory().gui();
     }
 }

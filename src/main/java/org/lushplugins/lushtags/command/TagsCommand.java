@@ -2,6 +2,7 @@ package org.lushplugins.lushtags.command;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.lushplugins.guihandler.gui.Gui;
 import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.lushtags.LushTags;
 import org.lushplugins.lushtags.tag.Tag;
@@ -27,7 +28,12 @@ public class TagsCommand {
         if (categoryId != null) {
             tagType.getTagCategory(categoryId).gui().open(player);
         } else {
-            tagType.getMainGui().open(actor.requirePlayer());
+            Gui.Builder gui = tagType.getGui();
+            if (gui != null) {
+                gui.open(actor.requirePlayer());
+            } else {
+                ChatColorHandler.sendMessage(actor.sender(), LushTags.getInstance().getConfigManager().getMessage("missing-gui"));
+            }
         }
     }
 
