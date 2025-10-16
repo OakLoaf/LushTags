@@ -13,12 +13,15 @@ public class TagType {
     private final String id;
     private final Map<String, Tag> tags;
     private final Map<String, TagCategory> categories;
+    private List<String> defaultTags;
+    private List<String> commands;
     private final Gui.Builder gui;
 
-    public TagType(String id, Map<String, Tag> tags, Map<String, TagCategory> categories) {
+    public TagType(String id, Map<String, Tag> tags, Map<String, TagCategory> categories, List<String> defaultTags) {
         this.id = id;
         this.tags = tags;
         this.categories = categories;
+        this.defaultTags = defaultTags;
 
         // TODO: Migrate to tag type specific menus definable in config.yml?
         GuiConfig guiConfig = LushTags.getInstance().getConfigManager().getGuiConfig();
@@ -34,12 +37,13 @@ public class TagType {
         this(
             id,
             tags.stream().collect(Collectors.toMap(Tag::id, tag -> tag)),
-            categories.stream().collect(Collectors.toMap(TagCategory::id, category -> category))
+            categories.stream().collect(Collectors.toMap(TagCategory::id, category -> category)),
+            Collections.emptyList()
         );
     }
 
     public TagType(String id) {
-        this(id, new HashMap<>(), new HashMap<>());
+        this(id, new HashMap<>(), new HashMap<>(), Collections.emptyList());
     }
 
     public String getId() {
@@ -76,6 +80,18 @@ public class TagType {
 
     public void addTagCategories(Collection<TagCategory> categories) {
         categories.forEach(this::addTagCategory);
+    }
+
+    public List<String> getDefaultTags() {
+        return defaultTags;
+    }
+
+    public void setDefaultTags(List<String> defaultTags) {
+        this.defaultTags = defaultTags;
+    }
+
+    public void setDefaultTag(String defaultTag) {
+        setDefaultTags(Collections.singletonList(defaultTag));
     }
 
     public Gui.Builder getGui() {

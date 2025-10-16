@@ -114,6 +114,7 @@ public class TagManager {
         String tagTypeId = directory.getName();
         List<Tag> tags = new ArrayList<>();
         List<TagCategory> categories = new ArrayList<>();
+        List<String> defaultTags = Collections.emptyList();
 
         try (
             DirectoryStream<Path> fileStream = Files.newDirectoryStream(directory.toPath(), "*.yml")
@@ -122,6 +123,17 @@ public class TagManager {
                 File file = filePath.toFile();
                 ConfigurationSection config = YamlConfiguration.loadConfiguration(file);
                 if (!config.getBoolean("enabled", true)) {
+                    continue;
+                }
+
+                if (file.getName().equals(".settings.yml")) {
+                    if (config.contains("defaults")) {
+                        defaultTags = YamlUtils.getStringList(config, "defaults");
+                    } else if (config.contains("default")) {
+                        defaultTags = YamlUtils.getStringList(config, "default");
+                    }
+
+                    // TODO: Parse and implement commands and tag type gui
                     continue;
                 }
 
@@ -163,6 +175,7 @@ public class TagManager {
             TagType tagType = this.tagTypes.computeIfAbsent(tagTypeId, TagType::new);
             tagType.addTags(tags);
             tagType.addTagCategories(categories);
+            tagType.setDefaultTags(defaultTags);
         }
     }
 }

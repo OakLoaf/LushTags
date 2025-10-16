@@ -37,6 +37,14 @@ public class UserCache extends org.lushplugins.lushlib.cache.UserCache<TagsUser>
 
                 Tag tag = tagType.getTag(tagId);
                 if (tag == null) {
+                    for (String defaultTagId : tagType.getDefaultTags()) {
+                        Tag defaultTag = tagType.getTag(defaultTagId);
+                        if (defaultTag != null && defaultTag.canBeUsedBy(player)) {
+                            user.setTag(tagTypeId, defaultTagId);
+                            break;
+                        }
+                    }
+
                     continue;
                 }
 

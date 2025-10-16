@@ -1,0 +1,39 @@
+# Define default tags in order of priority, this is what will be shown
+# when a player clears their tag or has no tag of this type enabled
+defaults:
+  - example_1
+  - example_2
+  - example_3
+
+# Commands that should open this tag type gui
+# Changing commands requires a restart
+commands:
+  - "raritytags"
+
+# An optional main gui, this is useful for when you have multiple categories in one tag type
+gui:
+  title: "Rarity Tags"
+  format:
+    - "#########"
+    - "##c#r#s##"
+    - "#########"
+  slots:
+    'c':
+      category: common
+      icon:
+        material: red_dye
+        display-name: "<red>Common Tags"
+    'r':
+      category: rare
+      icon:
+        material: orange_dye
+        display-name: "<orange>Rare Tags"
+    's':
+      category: special
+      icon:
+        material: yellow_dye
+        display-name: "<yellow>Special Tags"
+    '#':
+      icon:
+        material: lime_stained_glass_pane
+        display-name: "&r"
