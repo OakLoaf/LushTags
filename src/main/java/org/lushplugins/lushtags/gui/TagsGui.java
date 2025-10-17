@@ -78,6 +78,21 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
             return;
         }
 
+        TagType tagType = LushTags.getInstance().getTagManager().getTagType(this.tagType);
+        if (tagType == null) {
+            return;
+        }
+
+        for (String defaultTagId : tagType.getDefaultTags()) {
+            Tag defaultTag = tagType.getTag(defaultTagId);
+            if (defaultTag != null && defaultTag.canBeUsedBy(actor.player())) {
+                user.setTag(tagType.getId(), defaultTagId);
+                ChatColorHandler.sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
+                    .replace("%tag_type%", this.tagType));
+                return;
+            }
+        }
+
         user.removeTag(this.tagType);
         ChatColorHandler.sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
             .replace("%tag_type%", this.tagType));

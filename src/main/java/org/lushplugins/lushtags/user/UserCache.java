@@ -7,7 +7,6 @@ import org.lushplugins.lushtags.LushTags;
 import org.lushplugins.lushtags.tag.Tag;
 import org.lushplugins.lushtags.tag.TagType;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,21 +25,13 @@ public class UserCache extends org.lushplugins.lushlib.cache.UserCache<TagsUser>
     public void onUserConnect(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         this.loadUser(player.getUniqueId(), true).thenAccept(user -> {
-            for (Map.Entry<String, String> entry : user.getTags().entrySet()) {
-                String tagTypeId = entry.getKey();
-                String tagId = entry.getValue();
-
-                TagType tagType = LushTags.getInstance().getTagManager().getTagType(tagTypeId);
-                if (tagType == null) {
-                    continue;
-                }
-
-                Tag tag = tagType.getTag(tagId);
+            for (TagType tagType : LushTags.getInstance().getTagManager().getTagTypes()) {
+                Tag tag = user.getTag(tagType.getId());
                 if (tag == null) {
                     for (String defaultTagId : tagType.getDefaultTags()) {
                         Tag defaultTag = tagType.getTag(defaultTagId);
                         if (defaultTag != null && defaultTag.canBeUsedBy(player)) {
-                            user.setTag(tagTypeId, defaultTagId);
+                            user.setTag(tagType.getId(), defaultTagId);
                             break;
                         }
                     }
@@ -49,7 +40,7 @@ public class UserCache extends org.lushplugins.lushlib.cache.UserCache<TagsUser>
                 }
 
                 if (!tag.canBeUsedBy(player)) {
-                    user.removeTag(tagTypeId);
+                    user.removeTag(tagType.getId());
                 }
             }
         });
