@@ -159,7 +159,8 @@ public class TagManager {
                     guiLayer = guiConfig.layer();
                 }
 
-                Gui.Builder gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(tagTypeId, categoryId))
+                boolean showUsableTagsOnly = config.getBoolean("gui.show-usable-tags-only", false);
+                Gui.Builder gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(tagTypeId, categoryId, showUsableTagsOnly))
                     .title(title)
                     .size(guiLayer.getSize())
                     .locked(true)

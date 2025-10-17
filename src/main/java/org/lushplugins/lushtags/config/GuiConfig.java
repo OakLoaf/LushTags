@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lushplugins.guihandler.gui.GuiLayer;
 import org.lushplugins.guihandler.slot.SlotProvider;
 import org.lushplugins.lushlib.libraries.jackson.annotation.JsonCreator;
+import org.lushplugins.lushlib.libraries.jackson.annotation.JsonIgnoreProperties;
 import org.lushplugins.lushlib.libraries.jackson.annotation.JsonProperty;
 import org.lushplugins.lushlib.utils.DisplayItemStack;
 
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record GuiConfig(@Nullable String title, List<String> format, Map<Character, SlotConfig> slots) {
 
     @JsonCreator

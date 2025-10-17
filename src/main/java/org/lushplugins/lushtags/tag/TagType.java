@@ -26,7 +26,7 @@ public class TagType {
         // TODO: Migrate to tag type specific menus definable in config.yml?
         GuiConfig guiConfig = LushTags.getInstance().getConfigManager().getGuiConfig();
         GuiLayer guiLayer = guiConfig.layer();
-        this.gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(id, null))
+        this.gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(id, null, false))
             .title(guiConfig.title())
             .size(guiLayer.getSize())
             .locked(true)

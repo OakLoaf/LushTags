@@ -25,10 +25,11 @@ import java.util.stream.Stream;
 /**
  * @param tagType Tag type to filter by
  * @param category Category to filter by, if {@code null} tags from all categories will be shown
+ * @param showUsableTagsOnly Whether to only show tags that the player can use
  */
 @SuppressWarnings("unused")
 @CustomGui
-public record TagsGui(String tagType, @Nullable String category) implements PagedGui<Tag> {
+public record TagsGui(String tagType, @Nullable String category, boolean showUsableTagsOnly) implements PagedGui<Tag> {
 
     @GuiEvent(GuiAction.REFRESH)
     public void tags(Gui gui, @Slots('t') List<Slot> slots) {
@@ -123,8 +124,14 @@ public record TagsGui(String tagType, @Nullable String category) implements Page
             return Stream.empty();
         }
 
-        return tagType.getTags().stream()
+        Stream<Tag> stream = tagType.getTags().stream()
             .filter(tag -> this.category == null || Objects.equals(tag.category(), this.category));
+
+        if (this.showUsableTagsOnly) {
+            stream = stream.filter(tag -> tag.canBeUsedBy(gui.actor().player()));
+        }
+        
+        return stream;
     }
 
     @Override
