@@ -4,6 +4,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lushplugins.lushlib.utils.DisplayItemStack;
+import org.lushplugins.lushlib.utils.converter.YamlConverter;
 import org.lushplugins.lushtags.LushTags;
 import org.lushplugins.lushtags.config.GuiConfig;
 import org.lushplugins.lushtags.gui.TagsGui;
@@ -72,8 +74,9 @@ public class TagManager {
             String tagString = tagSection.getString("tag");
             String category = tagSection.getString("category", defaultCategory);
             String permission = tagSection.getString("permission");
+            DisplayItemStack icon = tagSection.contains("icon") ? YamlConverter.getDisplayItem(tagSection.getConfigurationSection("icon")) : null;
 
-            Tag tag = new Tag(id, name, tagString, category, permission);
+            Tag tag = new Tag(id, name, tagString, category, permission, icon);
             tags.add(tag);
         }
 

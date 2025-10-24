@@ -39,7 +39,7 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
             return;
         }
 
-        DisplayItemStack tagIcon = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon();
+        DisplayItemStack.Builder tagIconBase = DisplayItemStack.builder(LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon());
 
         ArrayDeque<Tag> tags = this.getPageContent(gui, gui.page(), slots.size());
         for (Slot slot : slots) {
@@ -50,7 +50,7 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
 
             Tag tag = tags.pop();
 
-            DisplayItemStack icon = DisplayItemStack.builder(tagIcon)
+            DisplayItemStack icon = (tag.icon() != null ? tagIconBase.overwrite(DisplayItemStack.builder(tag.icon())) : tagIconBase)
                 .replace(str -> str
                     .replace("%tag%", tag.tag())
                     .replace("%tag_name%", tag.name()))

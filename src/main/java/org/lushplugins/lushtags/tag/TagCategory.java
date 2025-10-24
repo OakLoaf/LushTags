@@ -10,5 +10,5 @@ public record TagCategory(
     String tagTypeId,
     List<String> commands,
     Gui.Builder gui,
-    DisplayItemStack tagIcon // TODO: Remove when possible
+    DisplayItemStack tagIcon
 ) {}
