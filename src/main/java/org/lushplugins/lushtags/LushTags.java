@@ -72,7 +72,9 @@ public final class LushTags extends SpigotPlugin {
         // TODO: Make dynamic commands update on reload
         for (TagType tagType : this.tagManager.getTagTypes()) {
             for (TagCategory category : tagType.getTagCategories()) {
-                this.lamp.register(new Orphans(category.commands()).handler(new TagCategoryCommand(tagType.getId(), category.id())));
+                if (category.hasCommands()) {
+                    this.lamp.register(new Orphans(category.commands()).handler(new TagCategoryCommand(tagType.getId(), category.id())));
+                }
             }
         }
 

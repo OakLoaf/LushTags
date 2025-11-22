@@ -11,4 +11,8 @@ public record TagCategory(
     List<String> commands,
     Gui.Builder gui,
     DisplayItemStack tagIcon
-) {}
+) {
+    public boolean hasCommands() {
+        return !commands.isEmpty();
+    }
+}
