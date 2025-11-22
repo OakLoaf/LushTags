@@ -27,13 +27,13 @@ dependencies {
     compileOnly("org.xerial:sqlite-jdbc:3.46.0.0")
 
     // Soft Dependencies
-    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("me.clip:placeholderapi:2.11.7")
 
     // Libraries
     implementation("org.lushplugins:LushLib:0.10.82")
     implementation("com.zaxxer:HikariCP:7.0.2")
-    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.13")
-    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.13")
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.14")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.14")
     implementation("org.lushplugins:GuiHandler:1.0.0-alpha30")
     implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha6")
 }
@@ -97,7 +97,7 @@ modrinth {
         "1.18", "1.18.1", "1.18.2",
         "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
         "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6",
-        "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9"
+        "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10"
     )
     loaders.addAll("spigot", "paper", "purpur")
     syncBodyFrom.set(rootProject.file("README.md").readText())
