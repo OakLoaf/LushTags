@@ -2,6 +2,7 @@ package org.lushplugins.lushtags.config;
 
 import org.jetbrains.annotations.Nullable;
 import org.lushplugins.guihandler.gui.GuiLayer;
+import org.lushplugins.guihandler.slot.BasicSlotProvider;
 import org.lushplugins.guihandler.slot.SlotProvider;
 import org.lushplugins.lushlib.libraries.jackson.annotation.JsonCreator;
 import org.lushplugins.lushlib.libraries.jackson.annotation.JsonIgnoreProperties;
@@ -34,9 +35,10 @@ public record GuiConfig(@Nullable String title, List<String> format, Map<Charact
 
     public record SlotConfig(String type, DisplayItemStack icon) {
 
-        public SlotProvider asSlotProvider() {
-            return new SlotProvider()
-                .iconProvider((context) -> this.icon.hasType() ? this.icon.asItemStack(context.gui().actor().player()) : null);
+        public BasicSlotProvider asSlotProvider() {
+            return (BasicSlotProvider) SlotProvider.builder()
+                .iconProvider((context) -> this.icon.hasType() ? this.icon.asItemStack(context.gui().actor().player()) : null)
+                .build();
         }
     }
 }

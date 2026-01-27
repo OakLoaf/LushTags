@@ -47,7 +47,7 @@ public final class LushTags extends SpigotPlugin {
     @Override
     public void onEnable() {
         this.guiHandler = GuiHandler.builder(this)
-            .registerLabelProvider(' ', new SlotProvider())
+            .registerLabelProvider(' ', SlotProvider.builder().build())
             .build();
 
         this.lamp = BukkitLamp.builder(this)

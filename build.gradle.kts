@@ -3,8 +3,8 @@ import java.io.InputStreamReader
 
 plugins {
     `java-library`
-    id("com.gradleup.shadow") version("8.3.0")
-    id("xyz.jpenilla.run-paper") version("2.2.4")
+    id("com.gradleup.shadow") version("9.3.1")
+    id("xyz.jpenilla.run-paper") version("3.0.2")
     id("com.modrinth.minotaur") version ("2.+")
 }
 
@@ -30,12 +30,12 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.7")
 
     // Libraries
-    implementation("org.lushplugins:LushLib:0.10.83")
+    implementation("org.lushplugins:LushLib:0.10.84")
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.14")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.14")
-    implementation("org.lushplugins:GuiHandler:1.0.0-alpha30")
-    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha6")
+    implementation("org.lushplugins:GuiHandler:1.0.1")
+    implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha7")
 }
 
 java {

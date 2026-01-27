@@ -57,7 +57,7 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
                 .build();
 
             slot.icon(icon.asItemStack(actor.player()));
-            slot.button((context) -> {
+            slot.button((event, context) -> {
                 Player player = actor.player();
                 if (tag.canBeUsedBy(player)) {
                     user.setTag(this.tagType, tag.id());
