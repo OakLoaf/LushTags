@@ -50,7 +50,7 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
 
             Tag tag = tags.pop();
 
-            DisplayItemStack icon = (tag.icon() != null ? tagIconBase.overwrite(DisplayItemStack.builder(tag.icon())) : tagIconBase)
+            DisplayItemStack icon = (tag.icon() != null ? tagIconBase.overwrite(DisplayItemStack.builder(tag.icon())) : tagIconBase.clone())
                 .replace(str -> str
                     .replace("%tag%", tag.tag())
                     .replace("%tag_name%", tag.name()))
