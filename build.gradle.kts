@@ -30,7 +30,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.2")
 
     // Libraries
-    implementation("org.lushplugins:LushLib:0.10.85")
+    implementation("org.lushplugins:LushLib:0.10.89")
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.16")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.16")
