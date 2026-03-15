@@ -1,7 +1,8 @@
 package org.lushplugins.lushtags.tag;
 
+import org.lushplugins.guihandler.config.GuiConfig;
+import org.lushplugins.guihandler.config.slot.IconConfig;
 import org.lushplugins.guihandler.gui.Gui;
-import org.lushplugins.lushlib.utils.DisplayItemStack;
 
 import java.util.List;
 
@@ -9,8 +10,9 @@ public record TagCategory(
     String id,
     String tagTypeId,
     List<String> commands,
+    GuiConfig guiConfig,
     Gui.Builder gui,
-    DisplayItemStack tagIcon
+    IconConfig tagIcon
 ) {
     public boolean hasCommands() {
         return !commands.isEmpty();

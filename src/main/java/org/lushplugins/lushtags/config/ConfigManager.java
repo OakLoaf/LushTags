@@ -1,34 +1,38 @@
 package org.lushplugins.lushtags.config;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.lushplugins.guihandler.config.GuiConfig;
+import org.lushplugins.lushlib.config.YamlUtils;
 import org.lushplugins.lushtags.LushTags;
 
-import java.io.IOException;
+import java.util.Map;
 
 public class ConfigManager {
-    private Config config;
+    private GuiConfig tagsGui;
+    private Map<String, String> messages;
 
     public ConfigManager() {
         LushTags.getInstance().saveDefaultConfig();
     }
 
     public void reloadConfig() {
-        try {
-            this.config = LushTags.YAML_MAPPER.readValue(LushTags.getInstance().getDataPath().resolve("config.yml").toFile(), Config.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        LushTags.getInstance().reloadConfig();
+        FileConfiguration config = LushTags.getInstance().getConfig();
+
+        this.tagsGui = new GuiConfig(config.getConfigurationSection("tags-gui"));
+        this.messages = YamlUtils.getMap(config, "messages", String.class);
     }
 
     public GuiConfig getGuiConfig() {
-        return this.config.tagsGui();
+        return tagsGui;
     }
 
     public String getMessage(String key) {
-        return this.config.messages().get(key);
+        return messages.get(key);
     }
 
     public String getMessageOrEmpty(String key) {
-        String message = this.getMessage(key);
+        String message = getMessage(key);
         return message != null ? message : "";
     }
 }

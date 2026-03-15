@@ -1,7 +1,13 @@
 package org.lushplugins.lushtags.gui;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.lushplugins.chatcolorhandler.paper.PaperColor;
+import org.lushplugins.guihandler.config.slot.IconConfig;
+import org.lushplugins.guihandler.config.slot.SlotConfig;
+import org.lushplugins.guihandler.slot.*;
+import org.lushplugins.guihandler.slot.Slot;
 import org.lushplugins.lushtags.LushTags;
 import org.lushplugins.lushtags.user.TagsUser;
 import org.lushplugins.guihandler.annotation.*;
@@ -9,17 +15,11 @@ import org.lushplugins.guihandler.gui.Gui;
 import org.lushplugins.guihandler.gui.GuiAction;
 import org.lushplugins.guihandler.gui.GuiActor;
 import org.lushplugins.guihandler.gui.PagedGui;
-import org.lushplugins.guihandler.slot.IconProvider;
-import org.lushplugins.guihandler.slot.Slot;
-import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
-import org.lushplugins.lushlib.utils.DisplayItemStack;
+import org.lushplugins.lushlib.item.DisplayItemStack;
 import org.lushplugins.lushtags.tag.Tag;
 import org.lushplugins.lushtags.tag.TagType;
 
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -31,48 +31,55 @@ import java.util.stream.Stream;
 @CustomGui
 public record TagsGui(String tagType, @Nullable String category, boolean showUsableTagsOnly) implements PagedGui<Tag> {
 
-    @GuiEvent(GuiAction.REFRESH)
-    public void tags(Gui gui, @Slots('t') List<Slot> slots) {
+    @GuiActionHandler(GuiAction.REFRESH)
+    public void tags(Gui gui, @LabelledSlots('t') List<Slot> slots) {
         GuiActor actor = gui.actor();
         TagsUser user = LushTags.getInstance().getUserCache().getCachedUser(actor.uuid());
         if (user == null) {
             return;
         }
 
-        DisplayItemStack.Builder tagIconBase = DisplayItemStack.builder(LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon());
+        IconConfig tagIconBase = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).tagIcon();
 
         ArrayDeque<Tag> tags = this.getPageContent(gui, gui.page(), slots.size());
         for (Slot slot : slots) {
             if (tags.isEmpty()) {
-                slot.iconProvider(IconProvider.EMPTY);
+                slot.icon((SlotIcon) null);
                 continue;
             }
 
             Tag tag = tags.pop();
+            DisplayItemStack.Builder iconBuilder;
+            if (tag.icon() != null) {
+                iconBuilder = tagIconBase.overwrite(DisplayItemStack.builder(tag.icon()));
+            } else {
+                iconBuilder = DisplayItemStack.builder(tagIconBase.icon());
+            }
 
-            DisplayItemStack icon = (tag.icon() != null ? tagIconBase.overwrite(DisplayItemStack.builder(tag.icon())) : tagIconBase.clone())
+            slot.icon(iconBuilder
                 .replace(str -> str
                     .replace("%tag%", tag.tag())
                     .replace("%tag_name%", tag.name()))
-                .build();
+                .build()
+                .asItemStack(actor.player())
+            );
 
-            slot.icon(icon.asItemStack(actor.player()));
-            slot.button((event, context) -> {
+            slot.action((event, context) -> {
                 Player player = actor.player();
                 if (tag.canBeUsedBy(player)) {
                     user.setTag(this.tagType, tag.id());
-                    ChatColorHandler.sendMessage(player, LushTags.getInstance().getConfigManager().getMessage("set-tag")
+                    PaperColor.handler().sendMessage(player, LushTags.getInstance().getConfigManager().getMessage("set-tag")
                         .replace("%tag_type%", this.tagType)
                         .replace("%tag%", tag.tag())
                         .replace("%tag_name%", tag.name()));
                 } else {
-                    ChatColorHandler.sendMessage(player, LushTags.getInstance().getConfigManager().getMessage("no-permission"));
+                    PaperColor.handler().sendMessage(player, LushTags.getInstance().getConfigManager().getMessage("no-permission"));
                 }
             });
         }
     }
 
-    @ButtonProvider('r')
+    @SlotActionProvider('r')
     public void removeTagButton(GuiActor actor) {
         TagsUser user = LushTags.getInstance().getUserCache().getCachedUser(actor.uuid());
         if (user == null) {
@@ -88,33 +95,20 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
             Tag defaultTag = tagType.getTag(defaultTagId);
             if (defaultTag != null && defaultTag.canBeUsedBy(actor.player())) {
                 user.setTag(tagType.getId(), defaultTagId);
-                ChatColorHandler.sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
+                PaperColor.handler().sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
                     .replace("%tag_type%", this.tagType));
                 return;
             }
         }
 
         user.removeTag(this.tagType);
-        ChatColorHandler.sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
+        PaperColor.handler().sendMessage(actor.player(), LushTags.getInstance().getConfigManager().getMessage("remove-tag")
             .replace("%tag_type%", this.tagType));
     }
 
-    // TODO: Move to PagedGui in GuiHandler
-    @ButtonProvider('>')
-    public void nextPageButton(Gui gui, @Slots('t') List<Slot> slots) {
-        int pageSize = slots.size();
-        Stream<Tag> content = this.getPageContentStream(gui, gui.page(), pageSize);
-        if (content.count() == pageSize) {
-            gui.nextPage();
-        }
-    }
-
-    // TODO: Move to PagedGui in GuiHandler
-    @ButtonProvider('<')
-    public void prevPageButton(Gui gui) {
-        if (gui.page() > 1) {
-            gui.previousPage();
-        }
+    @Override
+    public char getContentLabel() {
+        return 't';
     }
 
     @Override
@@ -137,5 +131,37 @@ public record TagsGui(String tagType, @Nullable String category, boolean showUsa
     @Override
     public Comparator<Tag> getContentSortMethod() {
         return Comparator.comparing(Tag::id);
+    }
+
+    @Override
+    public ItemStack getNextPageIcon(SlotContext context, boolean active) {
+        Map<Character, SlotConfig> slots = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).guiConfig().slots();
+        if (active) {
+            if (slots.containsKey('>')) {
+                return slots.get('>').icon().icon(context);
+            }
+        } else {
+            if (slots.containsKey('#')) {
+                return slots.get('#').icon().icon(context);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public ItemStack getPreviousPageIcon(SlotContext context, boolean active) {
+        Map<Character, SlotConfig> slots = LushTags.getInstance().getTagManager().getTagType(tagType).getTagCategory(category).guiConfig().slots();
+        if (active) {
+            if (slots.containsKey('<')) {
+                return slots.get('<').icon().icon(context);
+            }
+        } else {
+            if (slots.containsKey('#')) {
+                return slots.get('#').icon().icon(context);
+            }
+        }
+
+        return null;
     }
 }

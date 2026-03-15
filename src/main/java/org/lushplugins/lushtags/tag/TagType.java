@@ -1,10 +1,9 @@
 package org.lushplugins.lushtags.tag;
 
+import org.lushplugins.guihandler.config.GuiConfig;
 import org.lushplugins.lushtags.LushTags;
-import org.lushplugins.lushtags.config.GuiConfig;
 import org.lushplugins.lushtags.gui.TagsGui;
 import org.lushplugins.guihandler.gui.Gui;
-import org.lushplugins.guihandler.gui.GuiLayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,12 +24,8 @@ public class TagType {
 
         // TODO: Migrate to tag type specific menus definable in config.yml?
         GuiConfig guiConfig = LushTags.getInstance().getConfigManager().getGuiConfig();
-        GuiLayer guiLayer = guiConfig.layer();
-        this.gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(id, null, false))
-            .title(guiConfig.title())
-            .size(guiLayer.getSize())
-            .locked(true)
-            .applyLayer(guiLayer);
+        this.gui = guiConfig.applyTo(LushTags.getInstance().getGuiHandler().prepare(new TagsGui(id, null, false)))
+            .locked(true);
     }
 
     public TagType(String id, List<Tag> tags, List<TagCategory> categories) {
