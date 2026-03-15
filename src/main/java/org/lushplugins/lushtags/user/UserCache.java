@@ -10,7 +10,7 @@ import org.lushplugins.lushtags.tag.TagType;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class UserCache extends org.lushplugins.lushlib.cache.UserCache<TagsUser> {
+public class UserCache extends org.lushplugins.lushlib.utils.cache.UserCache<TagsUser> {
 
     public UserCache(JavaPlugin plugin) {
         super(plugin);

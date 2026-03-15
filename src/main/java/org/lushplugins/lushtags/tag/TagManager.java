@@ -4,15 +4,14 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lushplugins.lushlib.utils.DisplayItemStack;
-import org.lushplugins.lushlib.utils.converter.YamlConverter;
+import org.lushplugins.guihandler.config.GuiConfig;
+import org.lushplugins.lushlib.item.DisplayItemStack;
+import org.lushplugins.lushlib.config.YamlConverter;
 import org.lushplugins.lushtags.LushTags;
-import org.lushplugins.lushtags.config.GuiConfig;
 import org.lushplugins.lushtags.gui.TagsGui;
 import org.lushplugins.guihandler.gui.Gui;
-import org.lushplugins.guihandler.gui.GuiLayer;
 import org.lushplugins.lushlib.utils.FilenameUtils;
-import org.lushplugins.lushlib.utils.YamlUtils;
+import org.lushplugins.lushlib.config.YamlUtils;
 import org.lushplugins.lushtags.config.TagsConfig;
 
 import java.io.File;
@@ -112,7 +111,6 @@ public class TagManager {
         return tags;
     }
 
-    // TODO: Migrate fully to Jackson
     private void loadTagTypeFromDirectory(File directory) {
         String tagTypeId = directory.getName();
         List<Tag> tags = new ArrayList<>();
@@ -140,36 +138,22 @@ public class TagManager {
                     continue;
                 }
 
-                TagsConfig tagsConfig;
-                try {
-                    tagsConfig = LushTags.YAML_MAPPER.readValue(file, TagsConfig.class);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
+                TagsConfig tagsConfig = new TagsConfig(config);
                 String categoryId = FilenameUtils.removeExtension(file.getName());
                 tags.addAll(this.readTagsFromConfig(config, categoryId));
 
-                String title;
-                GuiLayer guiLayer;
+                GuiConfig guiConfig;
                 if (tagsConfig.gui() != null) {
-                    GuiConfig guiConfig = tagsConfig.gui();
-                    title = guiConfig.title();
-                    guiLayer = guiConfig.layer();
+                    guiConfig = tagsConfig.gui();
                 } else {
-                    GuiConfig guiConfig = LushTags.getInstance().getConfigManager().getGuiConfig();
-                    title = guiConfig.title();
-                    guiLayer = guiConfig.layer();
+                    guiConfig = LushTags.getInstance().getConfigManager().getGuiConfig();
                 }
 
                 boolean showUsableTagsOnly = config.getBoolean("gui.show-usable-tags-only", false);
-                Gui.Builder gui = LushTags.getInstance().getGuiHandler().prepare(new TagsGui(tagTypeId, categoryId, showUsableTagsOnly))
-                    .title(title)
-                    .size(guiLayer.getSize())
-                    .locked(true)
-                    .applyLayer(guiLayer);
+                Gui.Builder gui = guiConfig.applyTo(LushTags.getInstance().getGuiHandler().prepare(new TagsGui(tagTypeId, categoryId, showUsableTagsOnly)))
+                    .locked(true);
 
-                categories.add(new TagCategory(categoryId, tagTypeId, tagsConfig.commands(), gui, tagsConfig.getTagIcon()));
+                categories.add(new TagCategory(categoryId, tagTypeId, tagsConfig.commands(), guiConfig, gui, tagsConfig.tagIcon()));
             }
         } catch (IOException e) {
             LushTags.getInstance().getLogger().log(Level.WARNING, "Caught error whilst loading tags: ", e);

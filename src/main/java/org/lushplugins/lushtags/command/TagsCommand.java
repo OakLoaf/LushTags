@@ -2,8 +2,8 @@ package org.lushplugins.lushtags.command;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.lushplugins.chatcolorhandler.paper.PaperColor;
 import org.lushplugins.guihandler.gui.Gui;
-import org.lushplugins.lushlib.libraries.chatcolor.ChatColorHandler;
 import org.lushplugins.lushtags.LushTags;
 import org.lushplugins.lushtags.tag.Tag;
 import org.lushplugins.lushtags.tag.TagType;
@@ -32,7 +32,7 @@ public class TagsCommand {
             if (gui != null) {
                 gui.open(actor.requirePlayer());
             } else {
-                ChatColorHandler.sendMessage(actor.sender(), LushTags.getInstance().getConfigManager().getMessage("missing-gui"));
+                PaperColor.handler().sendMessage(actor.sender(), LushTags.getInstance().getConfigManager().getMessage("missing-gui"));
             }
         }
     }
@@ -53,7 +53,7 @@ public class TagsCommand {
 
         user.setTag(tagTypeId, tag.id());
         if (notify) {
-            ChatColorHandler.sendMessage(target, LushTags.getInstance().getConfigManager().getMessage("set-tag")
+            PaperColor.handler().sendMessage(target, LushTags.getInstance().getConfigManager().getMessage("set-tag")
                 .replace("%tag_type%", tagTypeId)
                 .replace("%tag%", tag.tag())
                 .replace("%tag_tag%", tag.tag())
