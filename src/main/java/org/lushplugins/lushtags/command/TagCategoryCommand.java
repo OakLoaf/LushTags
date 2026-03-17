@@ -20,6 +20,8 @@ public record TagCategoryCommand(String tagTypeId, String categoryId) implements
         Gui.Builder gui = category.gui();
         String title = gui.title().replace("%tag_category%", this.categoryId);
 
-        category.gui().openWith(player, title);
+        category.gui().prepare()
+            .title(title)
+            .open(player);
     }
 }

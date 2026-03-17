@@ -35,7 +35,7 @@ dependencies {
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.16")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.16")
-    implementation("org.lushplugins.guihandler:GuiHandler-common:2.0.0")
+    implementation("org.lushplugins.guihandler:GuiHandler:3.0.0")
     implementation("org.lushplugins.guihandler:GuiHandler-config:2.0.0")
     implementation("org.lushplugins:PlaceholderHandler:1.0.0-alpha10")
 }
