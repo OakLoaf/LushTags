@@ -14,7 +14,7 @@ import org.lushplugins.lushlib.libraries.jackson.databind.PropertyNamingStrategi
 import org.lushplugins.lushlib.libraries.jackson.dataformat.yaml.YAMLFactory;
 import org.lushplugins.lushlib.utils.plugin.SpigotPlugin;
 import org.lushplugins.lushlib.jackson.JacksonHelper;
-import org.lushplugins.placeholderhandler.PlaceholderHandler;
+import org.lushplugins.placeholderhandler.BukkitPlaceholderHandler;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
@@ -78,7 +78,7 @@ public final class LushTags extends SpigotPlugin {
             }
         }
 
-        PlaceholderHandler.builder(this)
+        BukkitPlaceholderHandler.builder(this)
             .registerParameterProvider(TagsUser.class, (type, parameter, context) -> {
                 return LushTags.getInstance().getUserCache().getCachedUser(context.player().getUniqueId());
             })
