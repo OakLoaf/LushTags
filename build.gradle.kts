@@ -27,7 +27,7 @@ dependencies {
     compileOnly("org.xerial:sqlite-jdbc:3.46.0.0")
 
     // Soft Dependencies
-    compileOnly("me.clip:placeholderapi:2.12.2")
+    compileOnly("me.clip:placeholderapi:2.12.3")
 
     // Libraries
     implementation("org.lushplugins:LushLib:1.0.0")
