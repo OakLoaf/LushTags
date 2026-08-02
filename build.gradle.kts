@@ -65,13 +65,14 @@ tasks {
     }
 
     processResources{
-        filesMatching("plugin.yml") {
-            expand(project.properties)
-        }
-
         inputs.property("version", rootProject.version)
+        inputs.property("commit", getCurrentCommitHash())
+
         filesMatching("plugin.yml") {
-            expand("version" to rootProject.version)
+            expand(
+                "version" to rootProject.version,
+                "commit" to getCurrentCommitHash()
+            )
         }
     }
 
@@ -91,7 +92,7 @@ modrinth {
         versionNumber.set(rootProject.version.toString())
         changelog.set(getChangelogSinceLastTag())
     } else {
-        versionNumber.set("${rootProject.version}-${getCurrentCommitHash()}")
+        versionNumber.set("${rootProject.version}+${getCurrentCommitHash()}")
     }
     uploadFile.set(file("build/libs/${project.name}-${project.version}.jar"))
     versionType.set(System.getenv("RELEASE_TYPE"))
