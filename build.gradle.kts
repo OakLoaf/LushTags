@@ -30,14 +30,14 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.3")
 
     // Libraries
-    implementation("org.lushplugins:LushLib:1.0.0")
-    implementation("org.lushplugins.lushlib:jackson:1.0.0")
+    implementation("org.lushplugins:LushLib:1.0.1")
+    implementation("org.lushplugins.lushlib:jackson:1.0.1")
     implementation("com.zaxxer:HikariCP:7.1.0")
     implementation("io.github.revxrsal:lamp.common:4.0.0-rc.18")
     implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.18")
     implementation("org.lushplugins.guihandler:GuiHandler:3.0.2")
     implementation("org.lushplugins.guihandler:GuiHandler-config:3.0.2")
-    implementation("org.lushplugins:placeholderhandler-bukkit:1.0.0")
+    implementation("org.lushplugins:placeholderhandler-bukkit:1.0.1")
 }
 
 java {
